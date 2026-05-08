@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ShoppingBag, Heart, User, LogOut, Menu, X, ChevronRight, Home, Grid, Package, Tag, List } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { logout } from '../../redux/slices/authSlice';
 
 const Header = () => {
@@ -106,96 +107,122 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Drawer - Simple Version */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-[200]">
-          <div 
-            onClick={() => setIsMenuOpen(false)}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          />
-          <div className="absolute top-0 left-0 h-full w-[80%] max-w-sm bg-white shadow-2xl flex flex-col">
-            <div className="p-6 border-b border-border flex justify-between items-center bg-accent/30">
-              <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                <img src="/logo.png" alt="VSR Logo" className="h-10 w-auto object-contain" />
-              </Link>
-              <button onClick={() => setIsMenuOpen(false)} className="p-2 hover:bg-white rounded-full transition-colors">
-                <X size={24} />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto py-8">
-              <div className="px-6 space-y-2">
-                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-muted mb-4">Navigation</p>
-                {navLinks.map((link) => (
-                  <Link 
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-between p-4 bg-accent/10 hover:bg-gold hover:text-white transition-all group"
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="text-gold group-hover:text-white transition-colors">{link.icon}</span>
-                      <span className="text-xs font-bold uppercase tracking-widest">{link.name}</span>
-                    </div>
-                    <ChevronRight size={14} className="opacity-30" />
-                  </Link>
-                ))}
-              </div>
-
-              {userInfo?.role === 'admin' && (
-                <div className="px-6 mt-10 space-y-2">
-                  <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-gold mb-4">Admin Dashboard</p>
-                  {adminLinks.map((link) => (
-                    <Link 
-                      key={link.path}
-                      to={link.path}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center justify-between p-4 bg-gold/5 hover:bg-gold hover:text-white transition-all group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="text-gold group-hover:text-white transition-colors">{link.icon}</span>
-                        <span className="text-xs font-bold uppercase tracking-widest">{link.name}</span>
-                      </div>
-                      <ChevronRight size={14} className="opacity-30" />
-                    </Link>
-                  ))}
-                </div>
-              )}
-
-              <div className="px-6 mt-10 space-y-2">
-                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-muted mb-4">Account</p>
-                <Link 
-                  to="/profile" 
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-4 p-4 hover:bg-accent transition-colors"
-                >
-                  <User size={18} className="text-muted" />
-                  <span className="text-xs font-bold uppercase tracking-widest">My Profile</span>
+      {/* Mobile Menu Drawer - Premium Motion Version */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <div className="fixed inset-0 z-[200] md:hidden">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="absolute top-0 left-0 h-full w-[85%] max-w-sm bg-white shadow-2xl flex flex-col"
+            >
+              <div className="p-6 border-b border-border flex justify-between items-center bg-accent/30">
+                <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                  <img src="/logo.png" alt="VSR Logo" className="h-10 w-auto object-contain" />
                 </Link>
-                <Link 
-                  to="/wishlist" 
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-4 p-4 hover:bg-accent transition-colors"
-                >
-                  <Heart size={18} className="text-muted" />
-                  <span className="text-xs font-bold uppercase tracking-widest">Wishlist</span>
-                </Link>
-              </div>
-            </div>
-
-            {userInfo && (
-              <div className="p-6 border-t border-border">
                 <button 
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-3 p-4 border border-border hover:bg-black hover:text-white transition-all text-xs font-bold uppercase tracking-widest"
+                  onClick={() => setIsMenuOpen(false)} 
+                  className="p-2 hover:bg-white rounded-full transition-all active:scale-90"
                 >
-                  <LogOut size={16} /> Sign Out
+                  <X size={24} />
                 </button>
               </div>
-            )}
+
+              <div className="flex-1 overflow-y-auto py-8 no-scrollbar">
+                <div className="px-6 space-y-2">
+                  <p className="text-[9px] uppercase font-bold tracking-[0.3em] text-muted mb-4 opacity-50">Navigation</p>
+                  {navLinks.map((link, idx) => (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + idx * 0.05 }}
+                      key={link.path}
+                    >
+                      <Link 
+                        to={link.path}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`flex items-center justify-between p-4 transition-all rounded-sm group active:bg-accent ${location.pathname === link.path ? 'bg-gold/5 border-l-2 border-gold' : 'hover:bg-accent/50'}`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <span className={`transition-colors ${location.pathname === link.path ? 'text-gold' : 'text-muted group-hover:text-gold'}`}>{link.icon}</span>
+                          <span className={`text-xs font-bold uppercase tracking-widest ${location.pathname === link.path ? 'text-black' : 'text-muted group-hover:text-black'}`}>{link.name}</span>
+                        </div>
+                        <ChevronRight size={14} className="opacity-30 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {userInfo?.role === 'admin' && (
+                  <div className="px-6 mt-10 space-y-2">
+                    <p className="text-[9px] uppercase font-bold tracking-[0.3em] text-gold mb-4">Command Center</p>
+                    {adminLinks.map((link, idx) => (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 + idx * 0.05 }}
+                        key={link.path}
+                      >
+                        <Link 
+                          to={link.path}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`flex items-center justify-between p-4 transition-all rounded-sm group active:bg-accent ${location.pathname === link.path ? 'bg-gold/10 border-l-2 border-gold' : 'hover:bg-gold/5'}`}
+                        >
+                          <div className="flex items-center gap-4">
+                            <span className="text-gold">{link.icon}</span>
+                            <span className="text-xs font-bold uppercase tracking-widest">{link.name}</span>
+                          </div>
+                          <ChevronRight size={14} className="opacity-30 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="px-6 mt-10 space-y-2">
+                  <p className="text-[9px] uppercase font-bold tracking-[0.3em] text-muted mb-4 opacity-50">Identity</p>
+                  <Link 
+                    to="/profile" 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-4 p-4 hover:bg-accent transition-all rounded-sm active:scale-[0.98]"
+                  >
+                    <User size={18} className="text-muted" />
+                    <span className="text-xs font-bold uppercase tracking-widest">My Profile</span>
+                  </Link>
+                  <Link 
+                    to="/wishlist" 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-4 p-4 hover:bg-accent transition-all rounded-sm active:scale-[0.98]"
+                  >
+                    <Heart size={18} className="text-muted" />
+                    <span className="text-xs font-bold uppercase tracking-widest">Wishlist</span>
+                  </Link>
+                </div>
+              </div>
+
+              {userInfo && (
+                <div className="p-6 border-t border-border bg-accent/10">
+                  <button 
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center gap-3 p-4 bg-black text-white hover:bg-gold transition-all text-xs font-bold uppercase tracking-widest shadow-xl shadow-black/10 active:scale-95"
+                  >
+                    <LogOut size={16} /> Sign Out
+                  </button>
+                </div>
+              )}
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };
