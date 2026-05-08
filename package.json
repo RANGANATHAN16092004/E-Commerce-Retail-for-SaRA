@@ -9,7 +9,7 @@
     "install-all": "npm run server-install && npm run client-install"
   },
   "dependencies": {
-    "cloudinary": "^1.41.3",
+    "cloudinary": "^1.41.0",
     "multer-storage-cloudinary": "^4.0.0"
   }
 }
