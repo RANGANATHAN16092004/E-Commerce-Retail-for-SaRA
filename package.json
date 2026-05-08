@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd client && npm install && npm run build",
-    "server-install": "cd server && npm install",
-    "client-install": "cd client && npm install",
+    "build": "cd client && npm install --legacy-peer-deps && npm run build",
+    "server-install": "cd server && npm install --legacy-peer-deps",
+    "client-install": "cd client && npm install --legacy-peer-deps",
     "install-all": "npm run server-install && npm run client-install"
   }
 }
