@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @theme {
   --color-primary: #FFFFFF;
@@ -7,63 +9,77 @@
   --color-accent: #F5F5F5;
   --color-muted: #717171;
   --color-border: #E5E5E5;
-  --color-gold: #FF4D4D; /* Updated to Light Red as per user request */
+  --color-gold: #FF4D4D; /* Light Red branding */
+  --color-overlay: rgba(0, 0, 0, 0.4);
   
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
+  
+  --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.1);
+  --shadow-gold: 0 10px 30px rgba(255, 77, 77, 0.2);
 }
 
 @layer base {
   body {
-    @apply bg-primary text-[#1A1A1A] font-sans antialiased overflow-x-hidden;
+    @apply bg-primary text-[#1A1A1A] font-sans antialiased overflow-x-hidden selection:bg-gold selection:text-white;
   }
-  h1, h2, h3, h4, .serif { @apply font-serif tracking-tight; }
+  h1, h2, h3, h4, .serif { @apply font-serif tracking-tight leading-tight; }
+  
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer components {
+  .section-padding {
+    @apply py-12 md:py-20 lg:py-32 px-4 md:px-8 lg:px-16;
+  }
+
   .glass {
-    @apply bg-white border border-border shadow-sm;
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-premium;
   }
   
   .luxury-btn {
-    @apply px-8 py-3 bg-black text-white font-bold uppercase tracking-widest text-[10px] transition-all duration-500 relative overflow-hidden;
+    @apply px-6 py-3 md:px-10 md:py-4 bg-black text-white font-bold uppercase tracking-[0.2em] text-[10px] md:text-[11px] transition-all duration-500 relative flex items-center justify-center gap-3 active:scale-95;
   }
 
   .luxury-btn:hover {
-    @apply bg-gold shadow-lg transform -translate-y-0.5;
+    @apply bg-gold shadow-gold -translate-y-1;
   }
 
   .luxury-input {
-    @apply bg-white border border-border px-4 py-3 outline-none focus:border-gold transition-colors text-black placeholder:text-muted w-full;
+    @apply bg-white border border-border px-4 py-4 md:px-6 outline-none focus:border-gold focus:ring-1 focus:ring-gold/20 transition-all text-black placeholder:text-muted/60 w-full rounded-none;
   }
 
   .premium-card {
-    @apply bg-white border border-border transition-all duration-500 hover:shadow-2xl hover:border-gold;
+    @apply bg-white border border-border/60 transition-all duration-700 hover:shadow-premium hover:border-gold/40 relative overflow-hidden;
   }
 
   /* Responsive Font Sizes */
-  .text-responsive-h1 { @apply text-5xl md:text-7xl lg:text-8xl; }
-  .text-responsive-h2 { @apply text-3xl md:text-5xl lg:text-6xl; }
+  .text-responsive-h1 { @apply text-4xl sm:text-5xl md:text-7xl lg:text-8xl; }
+  .text-responsive-h2 { @apply text-2xl sm:text-3xl md:text-5xl lg:text-6xl; }
+  .text-responsive-body { @apply text-sm md:text-base lg:text-lg leading-relaxed opacity-80; }
 
   /* Hide scrollbar utility */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
 
+/* Custom interactive elements */
+.tap-highlight-none {
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #F5F5F5;
+  background: #FFFFFF;
 }
 ::-webkit-scrollbar-thumb {
   background: #000000;
+  @apply transition-colors hover:bg-gold;
 }
 
