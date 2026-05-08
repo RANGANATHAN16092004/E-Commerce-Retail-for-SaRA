@@ -7,5 +7,9 @@
     "server-install": "cd server && npm install --legacy-peer-deps",
     "client-install": "cd client && npm install --legacy-peer-deps",
     "install-all": "npm run server-install && npm run client-install"
+  },
+  "dependencies": {
+    "cloudinary": "^1.41.3",
+    "multer-storage-cloudinary": "^4.0.0"
   }
 }
